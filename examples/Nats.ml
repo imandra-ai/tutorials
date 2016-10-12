@@ -12,7 +12,7 @@
  * in the documentation and/or other materials provided with the
  * distribution.
  *
- *    * Neither the name of Google Inc. nor the names of its
+ *    * Neither the name of Aesthetic Integration Limited nor the names of its
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
  *
@@ -29,17 +29,65 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
+type nat = Z | S of nat;;
 
-Sample project contains
+let rec add (x, y) =
+  match x with
+    Z -> y
+  | S n -> S (add(n, y));;
 
-- examples
-	-- Currency.ml
-	-- Decomp1.ml
-	-- Decomp2.ml
-	-- Gauss.ml
-	-- Messaging.ml
-	-- Nats.ml
-	-- SIX1.ml
-	-- SIX2.ml
-	-- SIX3.ml
-	-- Transitivity.ml
+let rec mult (x, y) =
+  match x with
+    Z -> Z
+  | S n -> add(mult(n, y), y);;
+
+let one = S Z;;
+
+:light off
+
+verify add_assoc (x, y, z) =
+  add(x, add(y, z)) = add(add(x, y), z);;
+
+verify add_by_zero_l (x) =
+  add(x, Z) = x;;
+
+verify add_one_neq (x,y) =
+  add(x, S y) <> x;;
+
+verify add_by_zero_r (x) =
+  add(Z, x) = x;;
+
+verify add_commutes (x,y) =
+  add(x,y) = add(y,x);;
+
+verify not_add_big (x,y) =
+  (y <> Z) ==> (add(x,y) <> x);;
+
+verify zero_cancel (x,y) =
+  (add(x,y) = x)
+   =
+  (y = Z);;
+
+verify add_cancel (x,y,z) =
+  (add(x,y) = add(x,z))
+   =
+  (y = z);;
+
+verify add_cancel_succ (x, y) =
+  S (add (x, y)) = add(x, S y);;
+
+verify add_cancel_1 (x,y) =
+  (x = add(x, y))
+    =
+  (y = Z);;
+
+verify add_nonzero_neq (x, y) =
+  add(x, y) <> x
+    <==>
+  (y <> Z);;
+
+verify mult_by_zero (x) =
+  mult(x, Z) = Z;;
+
+verify mult_commutes (x, y) =
+  mult(x, y) = mult(y, x);;

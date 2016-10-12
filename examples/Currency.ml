@@ -12,7 +12,7 @@
  * in the documentation and/or other materials provided with the
  * distribution.
  *
- *    * Neither the name of Google Inc. nor the names of its
+ *    * Neither the name of Aesthetic Integration Limited nor the names of its
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
  *
@@ -28,18 +28,60 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
+ 
+type currency = GBP of float | USD of float | EUR of float;;
 
+let f x =
+  match x with
+    Some n -> n + 1
+  | None -> 0;;
 
-Sample project contains
+let foo (x,y) =
+  match x, y with
+    Some n, 100 ->
+    n + 25
+  | Some n, m ->
+     76
+  | _ -> 25;;
 
-- examples
-	-- Currency.ml
-	-- Decomp1.ml
-	-- Decomp2.ml
-	-- Gauss.ml
-	-- Messaging.ml
-	-- Nats.ml
-	-- SIX1.ml
-	-- SIX2.ml
-	-- SIX3.ml
-	-- Transitivity.ml
+let bar (x,y,z) =
+  match x,y,z with
+    Some n, Some m, Some k ->
+    n + m + k - 2
+  | None, Some n, Some n' ->
+     if n = 2*n' + 28
+     then 956
+     else foo (Some (43*n), n')
+  | _ -> 99;;
+
+verify _ (x,y) = foo(x,y) <> 76;;
+
+verify _ (x,y) = foo(x,y) <> 97;;
+
+verify _ (x,y,z) = bar(x,y,z) <> 101883;;
+
+let g x =
+  if x > 0 then Some x else None;;
+
+verify _ x = g x <> None;;
+
+let c_add (x,y) =
+  match x,y with
+    GBP n, GBP m -> Some (GBP (n +. m))
+  | USD n, USD m -> Some (USD (n +. m))
+  | EUR n, EUR m -> Some (EUR (n +. m))
+  | _ -> None;;
+
+let same_currency (x,y) =
+  match x,y with
+    USD _, USD _ -> true
+  | GBP _, GBP _ -> true
+  | _ -> false;;
+
+verify c_add_safe (x,y) =
+  (same_currency(x,y))
+    ==>
+  (c_add(x,y) <> None);;
+
+verify _ (x,y) = same_currency(x,y);;
+

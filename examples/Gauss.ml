@@ -29,17 +29,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
+ 
+:rational_div on
 
-Sample project contains
+let rec sum(n) =
+  if n <= 0 then 0 else n + sum (n-1);;
 
-- examples
-	-- Currency.ml
-	-- Decomp1.ml
-	-- Decomp2.ml
-	-- Gauss.ml
-	-- Messaging.ml
-	-- Nats.ml
-	-- SIX1.ml
-	-- SIX2.ml
-	-- SIX3.ml
-	-- Transitivity.ml
+verify gauss (n) =
+  (n >= 0)
+     ==>
+  (sum n = (n * (n+1)) / 2);;
+
+verify gauss_bad (n) =
+  (n >= 0)
+     ==>
+  (sum n = (n * (n-1)) / 2);;
+
+:rational_div off

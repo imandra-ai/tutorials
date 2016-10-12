@@ -29,17 +29,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
+type msg_data_update = { u_order_id : int;
+                         new_price : float;
+                         new_qty : int };;
 
-Sample project contains
+type msg_data_cancel = { c_order_id : int };;
 
-- examples
-	-- Currency.ml
-	-- Decomp1.ml
-	-- Decomp2.ml
-	-- Gauss.ml
-	-- Messaging.ml
-	-- Nats.ml
-	-- SIX1.ml
-	-- SIX2.ml
-	-- SIX3.ml
-	-- Transitivity.ml
+type msg_data_success = { request_time : int;
+                          request_desc : int };;
+
+type msg_body = Msg_Fill of o_fill
+              | Msg_Reject of int
+              | Msg_Update of msg_data_update
+              | Msg_Cancel of msg_data_cancel
+              | Msg_Success of msg_data_success;;
+
+type e_msg = { msg_src : client;
+               msg_dest : client;
+               msg_body : msg_body;
+               msg_time : int };;
+
+type msg_buffer = e_msg list;;

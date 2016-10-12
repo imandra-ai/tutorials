@@ -12,7 +12,7 @@
  * in the documentation and/or other materials provided with the
  * distribution.
  *
- *    * Neither the name of Google Inc. nor the names of its
+ *    * Neither the name of Aesthetic Integration Limited nor the names of its
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
  *
@@ -29,17 +29,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
+ 
+let g x =
+  if x > 22 then 9
+  else 100 + x;;
 
-Sample project contains
+let f x =
+  if x > 99 then
+    100
+  else if x < 70 && x > 23
+  then 89 + x
+  else if x > 20
+  then g x + 20
+  else if x > -2 then
+    103
+  else 99;;
 
-- examples
-	-- Currency.ml
-	-- Decomp1.ml
-	-- Decomp2.ml
-	-- Gauss.ml
-	-- Messaging.ml
-	-- Nats.ml
-	-- SIX1.ml
-	-- SIX2.ml
-	-- SIX3.ml
-	-- Transitivity.ml
+:decompose f
+
+let side_cond x =
+  x > 25 && x < 30;;
+
+let side_cond_2 x =
+  x = 23;;
+
+:decompose f assuming side_cond
+
+:decompose f assuming side_cond_2
